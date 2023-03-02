@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AJAX - GET</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <header class="bg-success p-5 text-center text-white">
+      <h1 class="p-3">EVENEMENTS</h1>
+    </header>
+
+    <div class="container border mt-5">
+      <div class="row" id="affichage"></div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.min.js"
+      integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      $.ajax({
+        url: "https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-&q=&rows=15&sort=-date_start&facet=date_start&facet=date_end&facet=tags&facet=address_name&facet=address_zipcode&facet=address_city&facet=pmr&facet=blind&facet=deaf&facet=transport&facet=price_type&facet=access_type&facet=updated_at&facet=programs",
+        dataType: "json",
+        success: function (data) {
+          console.log(data);
+
+          // avec la boucle for(... of ...)
+        
+          for (let evenement of data.records) {
+            console.log(evenement);
+
+            let dateStart = new Date(evenement.fields.date_start);
+            let dateStartFr = dateStart.toLocaleDateString();
+            let dateEnd = new Date(evenement.fields.date_start);
+            let dateEndFr = dateStart.toLocaleDateString();
+
+            let contenu = `<div class="col-sm-4 mt-3"><div class="card">
+                                <div style="overflow: hidden; max-height: 260px;">
+                                    <img src="${evenement.fields.cover_url}" class="card-img-top" alt="...">
+                                </div>
+                                <div class="card-body">
+                                <h5 class="card-title">${evenement.fields.title}</h5>
+                                <p class="card-text">Début : ${dateStartFr} <br> Fin : ${dateEndFr}</p>
+                                <p><a href="${evenement.fields.url}">Site officiel</a></p>
+                                <a href="mailto:${evenement.fields.contact_mail}" class="btn btn-primary">Contacter</a>
+                                </div>
+                            </div></div>`;
+
+            $("#affichage").html($("#affichage").html() + contenu);
+          }
+
+          // Ou avec une boucle for() classique
+
+            for($i = 0; $i < data.records.length; $i++) {
+                let dateStart = new Date(data.records[$i].fields.date_start);
+                let dateStartFr = dateStart.toLocaleDateString();
+                let dateEnd = new Date(data.records[$i].fields.date_start);
+                let dateEndFr = dateStart.toLocaleDateString();
+
+                let contenu = `<div class="col-sm-4 mt-3"><div class="card">
+                                    <div style="overflow: hidden; max-height: 260px;">
+                                        <img src="${data.records[$i].fields.cover_url}" class="card-img-top" alt="...">
+                                    </div>
+                                    <div class="card-body">
+                                    <h5 class="card-title">${data.records[$i].fields.title}</h5>
+                                    <p class="card-text">Début : ${dateStartFr} <br> Fin : ${dateEndFr}</p>
+                                    <p><a href="${data.records[$i].fields.url}">Site officiel</a></p>
+                                    <a href="mailto:${data.records[$i].fields.contact_mail}" class="btn btn-primary">Contacter</a>
+                                    </div>
+                                </div></div>`;
+
+                $("#affichage").html($("#affichage").html() + contenu);
+            }
+        },
+      });
+    </script>
+  </body>
+</html>

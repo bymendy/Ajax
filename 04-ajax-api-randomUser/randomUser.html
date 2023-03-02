@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AJAX - GET</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <header class="bg-success p-5 text-center text-white">
+      <h1 class="p-3">Random User</h1>
+    </header>
+
+    <div class="container border mt-5">
+      <div class="row">
+        <div class="col-sm-3 mx-auto p-3 text-center">
+          <img src="" alt="" class="img-thumbnail" id="image" />
+          <p>Nom : <span id="nom"></span></p>
+          <p>Prénom :<span id="prenom"></span></p>
+          <p>Email :<span id="email"></span></p>
+          <p>Téléphone :<span id="phone"></span></p>
+          <p>Date de naissance :<span id="dateofbirth"></span></p>
+          <p>Adresse :<span id="adress"></span></p>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.min.js"
+      integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      /*
+        https://randomuser.me/
+*/
+      $.ajax({
+        url: "https://randomuser.me/api/",
+        dataType: "json",
+        success: function (data) {
+          console.log(data);
+
+          $("#image").attr("src", data.results[0].picture.large);
+          $("#nom").html(data.results[0].name.last);
+          $("#prenom").html(data.results[0].name.first);
+          $("#email").html(data.results[0].email);
+          $("#phone").html(data.results[0].phone);
+          let date_naissance = new Date(data.results[0].dob.date)
+          $("#dateofbirth").html(date_naissance.toLocaleDateString());
+          
+          let adress =
+            data.results[0].location.street.number +
+            " " +
+            data.results[0].location.street.name +
+            " " +
+            data.results[0].location.postcode +
+            " " +
+            data.results[0].location.city;
+
+          $("#adress").html(adress);
+        },
+      });
+    </script>
+  </body>
+</html>
