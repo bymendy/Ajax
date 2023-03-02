@@ -1,0 +1,6 @@
+A synchrone
+J avascript
+A nd
+X ml | J son
+
+Format de données lisible par JS et PHP notamment : JSON
